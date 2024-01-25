@@ -46,7 +46,12 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.text.isDigitsOnly
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import no.uio.ifi.in2000.halvorin.oblig1.ui.palindrome.PalindromeScreen
 import no.uio.ifi.in2000.halvorin.oblig1.ui.theme.Halvorin_oblig1Theme
+import no.uio.ifi.in2000.halvorin.oblig1.ui.unitconverter.UnitConverterScreen
 import kotlin.reflect.typeOf
 
 class MainActivity : ComponentActivity() {
@@ -56,101 +61,15 @@ class MainActivity : ComponentActivity() {
             Halvorin_oblig1Theme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    UnitConverter()
-                }
-            }
-        }
-    }
-}
+                    val navController = rememberNavController()
 
-@Suppress("SpellCheckingInspection")
-@OptIn(ExperimentalComposeUiApi::class)
-@Composable
-fun PalindromeChecker(modifier:Modifier = Modifier){
-    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally){
-        var text by remember { mutableStateOf("") }
-        var answer by remember { mutableStateOf("...") }
-
-        val keyboardController = LocalSoftwareKeyboardController.current
-        fun submit(s:String){
-            keyboardController?.hide()
-            Log.d("DEBUG", s)
-            answer = "teksten er${if(!isPalindrome(s)){" ikke"}else ""} et palindrom!" //<- litt goofy
-        }
-
-        Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically){
-            OutlinedTextField(
-                value = text,
-                onValueChange = { text = it },
-                label = { Text("Skriv inn") },
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                keyboardActions = KeyboardActions(onDone = { submit(text) })
-            )
-            Button(onClick = {submit(text) }) {
-                Icon(imageVector = Icons.Filled.Done, contentDescription = "")
-            }
-        }
-        //TODO this could be some sort of a neat popup
-        Text(text = answer)
-    }
-}
-
-@Preview()
-@Composable
-fun PalindromeCheckerPreview() {
-    Halvorin_oblig1Theme {
-        PalindromeChecker()
-    }
-}
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
-@Composable
-fun UnitConverter(){
-    val keyboardController = LocalSoftwareKeyboardController.current
-
-
-    var expanded by remember { mutableStateOf(false) }
-    val options = ConverterUnits.entries
-    var selected by remember { mutableStateOf(options[0]) }
-    var num by remember { mutableIntStateOf(0) }
-    Column {
-
-
-        Row {
-            TextField(
-                value = num.toString(),
-                onValueChange = { if (it.isDigitsOnly()) num = it.toInt() },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done)
-            )
-            //todo keyboard sometimes pops up here? why
-            ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = it }) {
-                TextField(
-                    modifier = Modifier.menuAnchor(),
-                    value = selected.toString(),
-                    onValueChange = {},
-                    readOnly = true,
-                    trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(
-                            expanded = expanded
-                        )
-                    },
-
-                )
-                ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-                    options.forEach { opt ->
-                        DropdownMenuItem(text = { Text(opt.toString()) }, onClick = {
-                            selected = opt
-                            expanded = false
-                        })
+                    NavHost(navController = navController, startDestination = "palindrome"){
+                        composable("palindrome"){ PalindromeScreen(navController = navController)}
+                        composable("unitconverter"){ UnitConverterScreen(navController = navController)}
                     }
+                    
                 }
             }
         }
-        Text(text = "tilsvarer ${converter(num, selected).toString()} liter.")
     }
-}
-
-@Preview(showSystemUi = true)
-@Composable
-fun UnitConverterPreview(){
-    UnitConverter()
 }
