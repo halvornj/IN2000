@@ -1,7 +1,9 @@
 package no.uio.ifi.in2000.halvorin.oblig1.ui.unitconverter
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
@@ -16,6 +18,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -29,9 +32,9 @@ import no.uio.ifi.in2000.halvorin.oblig1.converter
 
 @Composable
 fun UnitConverterScreen(navController: NavController){
-    Column {
+    Column (horizontalAlignment = Alignment.CenterHorizontally,verticalArrangement = Arrangement.SpaceBetween){
         UnitConverter()
-        Button(onClick = { navController.navigate("palindrome") }) {
+        Button(onClick = { navController.navigate("palindrome") }, Modifier.fillMaxWidth()) {
             Text(text = "palindrom-side")
         }
     }

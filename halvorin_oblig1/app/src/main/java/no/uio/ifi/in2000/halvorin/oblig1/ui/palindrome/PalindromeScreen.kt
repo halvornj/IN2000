@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -30,10 +32,10 @@ import no.uio.ifi.in2000.halvorin.oblig1.ui.theme.Halvorin_oblig1Theme
 
 @Composable
 fun PalindromeScreen(navController: NavController){
-    Column {
-
+    Column(horizontalAlignment = Alignment.CenterHorizontally,verticalArrangement = Arrangement.SpaceBetween) {
     PalindromeChecker()
-    Button(onClick = { navController.navigate("unitconverter")}) {
+
+    Button(onClick = { navController.navigate("unitconverter")}, Modifier.fillMaxWidth()) {
         Text(text = "unitconverter-side")
     }
     }
