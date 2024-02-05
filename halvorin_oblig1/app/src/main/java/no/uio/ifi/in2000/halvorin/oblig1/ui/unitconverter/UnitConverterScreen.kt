@@ -50,13 +50,12 @@ fun UnitConverter(){
     val options = ConverterUnits.entries
     var selected by remember { mutableStateOf(options[0]) }
     var num by remember { mutableIntStateOf(0) }
-    Column {
-
+    Column (horizontalAlignment = Alignment.CenterHorizontally){
 
         Row {
             TextField(
                 value = num.toString(),
-                onValueChange = { if (it.isDigitsOnly()) num = it.toInt() },
+                onValueChange = { if (it.isDigitsOnly()) num = try{it.toInt() }catch (e: NumberFormatException){0} },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done)
             )
             //todo keyboard sometimes pops up here? why

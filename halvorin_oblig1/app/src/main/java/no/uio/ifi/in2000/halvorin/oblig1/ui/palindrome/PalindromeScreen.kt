@@ -50,7 +50,7 @@ fun PalindromeScreen(navController: NavController){
 fun PalindromeChecker(modifier: Modifier = Modifier){
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally){
         var text by remember { mutableStateOf("") }
-        var answer by remember { mutableStateOf("...") }
+        var answer by remember { mutableStateOf("Skriv inn over for å sjekke om teksten er et palindrom") }
 
         val keyboardController = LocalSoftwareKeyboardController.current
         fun submit(s:String){
