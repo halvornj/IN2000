@@ -13,6 +13,7 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
+import io.ktor.util.reflect.TypeInfo
 import kotlinx.serialization.json.Json
 
 suspend fun getAlpacaPartiesData():List<PartyInfo>{
@@ -34,16 +35,9 @@ suspend fun getAlpacaPartiesData():List<PartyInfo>{
     try {
         val response: HttpResponse = client.get("https://www.uio.no/studier/emner/matnat/ifi/IN2000/v24/obligatoriske-oppgaver/alpacaparties.json")
 
-        //!DEBUG
-        println(response)
-
         //first, check for error codes. A request can be successful, with an unsuccessful body
         if(response.status.isSuccess()){
-            //DEBUG
-            println("IN isSuccess()")
-            val DEBUG : List<PartyInfo> = response.body()
-            println(DEBUG)
-            //parties = DEBUG
+            return response.body() as List<PartyInfo>
         }else if(response.status.value in 500..599){    //there's gotta be a better way to do this
             throw ServerResponseException(response, "error on server side")
         }else if(response.status.value in 400..499){
