@@ -15,44 +15,50 @@ import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.util.reflect.TypeInfo
 import kotlinx.serialization.json.Json
+import no.uio.ifi.in2000.halvorin.oblig2.model.alpacas.Parties
 
-suspend fun getAlpacaPartiesData():List<PartyInfo>{
+class AlpacaPartiesDataSource {
+    suspend fun getAlpacaPartiesData(): List<PartyInfo> {
 
-    val TAG = "AlpacaPartiesDataSource"
+        val TAG = "AlpacaPartiesDataSource"
 
-    var parties :List<PartyInfo> = mutableListOf()
+        var partyList: List<PartyInfo> = mutableListOf()
 
-    val client = HttpClient(Android){
-        install(ContentNegotiation){
-            json(Json {
-                ignoreUnknownKeys = true
-                isLenient = true
-                prettyPrint = true
-                encodeDefaults = true
-            })
+        val client = HttpClient(Android) {
+            install(ContentNegotiation) {
+                json(Json {
+                    ignoreUnknownKeys = true
+                    isLenient = true
+                    prettyPrint = true
+                    encodeDefaults = true
+                })
+            }
         }
-    }
-    try {
-        val response: HttpResponse = client.get("https://www.uio.no/studier/emner/matnat/ifi/IN2000/v24/obligatoriske-oppgaver/alpacaparties.json")
+        try {
+            val response: HttpResponse =
+                client.get("https://www.uio.no/studier/emner/matnat/ifi/IN2000/v24/obligatoriske-oppgaver/alpacaparties.json")
 
-        //first, check for error codes. A request can be successful, with an unsuccessful body
-        if(response.status.isSuccess()){
-            return response.body() as List<PartyInfo>
-        }else if(response.status.value in 500..599){    //there's gotta be a better way to do this
-            throw ServerResponseException(response, "error on server side")
-        }else if(response.status.value in 400..499){
-            throw ClientRequestException(response, "client-error upon request")
+            //first, check for error codes. A request can be successful, with an unsuccessful body
+            if (response.status.isSuccess()) {
+                val parties: Parties = response.body()
+                partyList = parties.parties
+
+            } else if (response.status.value in 500..599) {    //there's gotta be a better way to do this
+                throw ServerResponseException(response, "error on server side")
+            } else if (response.status.value in 400..499) {
+                throw ClientRequestException(response, "client-error upon request")
+            }
+
+
+        } catch (e: Exception) {//TODO find more specific exception, although most errors show up as status codes not exceptions?
+            //the throws above are basically useless until i find a more practical catch, but hey they look nice at least
+            //https://ktor.io/docs/client-retry.html#conditions
+            e.printStackTrace()
+
+        } finally {
+            client.close()
         }
 
-
-    }catch(e:Exception){//TODO find more specific exception, although most errors show up as status codes not exceptions?
-        //https://ktor.io/docs/client-retry.html#conditions
-        e.printStackTrace()
-
-    }finally {
-        client.close()
+        return partyList
     }
-
-
-    return parties
 }

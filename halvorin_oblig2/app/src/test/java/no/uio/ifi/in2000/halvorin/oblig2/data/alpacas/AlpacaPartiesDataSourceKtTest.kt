@@ -2,18 +2,21 @@ package no.uio.ifi.in2000.halvorin.oblig2.data.alpacas
 
 import android.webkit.URLUtil
 import androidx.core.net.toUri
+import androidx.core.text.isDigitsOnly
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.decodeURLPart
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.*
+import java.net.URL
 
 class AlpacaPartiesDataSourceKtTest{
+    val dataSource = AlpacaPartiesDataSource()
     @Test
     fun response_NotEmpty(){
         runBlocking {
-            val data = getAlpacaPartiesData()
+            val data = dataSource.getAlpacaPartiesData()
 
             assert(data.isNotEmpty()) { "expected size>0, got ${data.size}" } //kotlin really got a method for everything, huh
         }
@@ -21,13 +24,28 @@ class AlpacaPartiesDataSourceKtTest{
     @Test
     fun correct_entryCount(){
         runBlocking {
-            assert(getAlpacaPartiesData().size == 4)
+            assert(dataSource.getAlpacaPartiesData().size == 4)
         }
     }
     @Test
     fun valid_imageURLs(){
+        fun isValidURL(s:String):Boolean {
+            return try {
+                URL(s)
+                true
+            } catch (e: Exception) {
+                false
+            }
+        }
         runBlocking {
-            assert(URLUtil.isValidUrl(getAlpacaPartiesData()[0].img))
+            assert(isValidURL(dataSource.getAlpacaPartiesData()[0].img))
+        }
+    }
+    @Test
+    fun valid_ids(){
+        runBlocking{
+            assert(dataSource.getAlpacaPartiesData()[0].id.isDigitsOnly())
         }
     }
 }
+

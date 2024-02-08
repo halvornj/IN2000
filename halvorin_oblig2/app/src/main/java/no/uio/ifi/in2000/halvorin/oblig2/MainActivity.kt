@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import no.uio.ifi.in2000.halvorin.oblig2.data.alpacas.getAlpacaPartiesData
+import no.uio.ifi.in2000.halvorin.oblig2.data.alpacas.AlpacaPartiesDataSource
 import no.uio.ifi.in2000.halvorin.oblig2.ui.theme.Halvorin_oblig2Theme
 
 class MainActivity : ComponentActivity() {
