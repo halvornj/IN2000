@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Assertions.*
 import java.net.URL
 
 class AlpacaPartiesDataSourceKtTest{
-    val dataSource = AlpacaPartiesDataSource()
+    private val dataSource = AlpacaPartiesDataSource()
     @Test
     fun response_NotEmpty(){
         runBlocking {
@@ -43,8 +43,16 @@ class AlpacaPartiesDataSourceKtTest{
     }
     @Test
     fun valid_ids(){
+        fun isDigitsOnly(s:String):Boolean {
+            return try {
+                s.toInt()
+                true
+            } catch (e: Exception) {
+                false
+            }
+        }
         runBlocking{
-            assert(dataSource.getAlpacaPartiesData()[0].id.isDigitsOnly())
+            assert(isDigitsOnly(dataSource.getAlpacaPartiesData()[0].id))
         }
     }
 }

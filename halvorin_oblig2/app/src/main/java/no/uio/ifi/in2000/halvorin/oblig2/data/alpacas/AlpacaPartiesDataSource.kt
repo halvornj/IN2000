@@ -42,7 +42,6 @@ class AlpacaPartiesDataSource {
             if (response.status.isSuccess()) {
                 val parties: Parties = response.body()
                 partyList = parties.parties
-
             } else if (response.status.value in 500..599) {    //there's gotta be a better way to do this
                 throw ServerResponseException(response, "error on server side")
             } else if (response.status.value in 400..499) {
