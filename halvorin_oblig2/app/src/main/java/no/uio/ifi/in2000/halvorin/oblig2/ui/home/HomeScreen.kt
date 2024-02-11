@@ -50,7 +50,7 @@ fun AlpacaCard(partyInfo:PartyInfo){
             .padding(6.dp)
             .border(
                 width = 3.dp,
-                color = Color(android.graphics.Color.parseColor("#${partyInfo.color}")),
+                color = Color(android.graphics.Color.parseColor(partyInfo.color)),
                 shape = ShapeDefaults.Medium
             ),
 
