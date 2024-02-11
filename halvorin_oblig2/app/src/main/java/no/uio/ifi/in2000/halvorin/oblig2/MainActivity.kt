@@ -10,9 +10,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import no.uio.ifi.in2000.halvorin.oblig2.data.alpacas.AlpacaPartiesDataSource
+import androidx.navigation.compose.composable
+
+import no.uio.ifi.in2000.halvorin.oblig2.ui.home.HomeScreen
 import no.uio.ifi.in2000.halvorin.oblig2.ui.theme.Halvorin_oblig2Theme
 
 class MainActivity : ComponentActivity() {
@@ -25,7 +30,12 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    val navController = rememberNavController()
+                    NavHost(navController = navController, startDestination = "HomeScreen"){
+                        composable("HomeScreen"){ HomeScreen(navController = navController)}
+
+                    }
+
                 }
             }
         }

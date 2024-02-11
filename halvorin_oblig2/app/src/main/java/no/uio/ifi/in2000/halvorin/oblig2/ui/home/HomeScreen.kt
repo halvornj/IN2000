@@ -4,6 +4,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -11,6 +13,8 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,24 +22,37 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
 import no.uio.ifi.in2000.halvorin.oblig2.model.alpacas.PartyInfo
+import no.uio.ifi.in2000.halvorin.oblig2.ui.home.HomeScreenViewModel
+
 
 
 @Composable
-fun HomeScreen(viewModel: HomeScreenViewModel = viewModel()){
+fun HomeScreen(viewModel: HomeScreenViewModel = viewModel(), navController: NavController){
 
+    val partyInfoState : PartyInfoUiState by viewModel.partyInfoUiState.collectAsState()
+
+    LazyColumn() {
+        items(partyInfoState.parties){partyInfo ->
+            AlpacaCard(partyInfo = partyInfo)
+        }
+    }
 }
 
 
 @Composable
 fun AlpacaCard(partyInfo:PartyInfo){
     ElevatedCard(
-        modifier = Modifier.padding(6.dp).border(
-            width = 3.dp,
-            color = Color(android.graphics.Color.parseColor("#${partyInfo.color}")),
-            shape = ShapeDefaults.Medium),
+        modifier = Modifier
+            .padding(6.dp)
+            .border(
+                width = 3.dp,
+                color = Color(android.graphics.Color.parseColor("#${partyInfo.color}")),
+                shape = ShapeDefaults.Medium
+            ),
 
         elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp
