@@ -3,8 +3,12 @@ package no.uio.ifi.in2000.halvorin.oblig2.ui.home
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -18,9 +22,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
@@ -34,11 +40,15 @@ import no.uio.ifi.in2000.halvorin.oblig2.ui.home.HomeScreenViewModel
 fun HomeScreen(viewModel: HomeScreenViewModel = viewModel(), navController: NavController){
 
     val partyInfoState : PartyInfoUiState by viewModel.partyInfoUiState.collectAsState()
-
-    LazyColumn() {
+    Column(
+        modifier = Modifier.padding(3.dp)
+    ) {
+    Text(text = "Partier", fontSize = 45.sp)
+    LazyVerticalGrid(columns = GridCells.Fixed(2)) {
         items(partyInfoState.parties){partyInfo ->
             AlpacaCard(partyInfo = partyInfo)
         }
+    }
     }
 }
 
@@ -49,7 +59,7 @@ fun AlpacaCard(partyInfo:PartyInfo){
         modifier = Modifier
             .padding(6.dp)
             .border(
-                width = 3.dp,
+                width = 5.dp,
                 color = Color(android.graphics.Color.parseColor(partyInfo.color)),
                 shape = ShapeDefaults.Medium
             ),
@@ -67,7 +77,9 @@ fun AlpacaCard(partyInfo:PartyInfo){
             SubcomposeAsyncImage(
                 model = partyInfo.img,
                 loading = { CircularProgressIndicator()},
-                contentDescription = "image of the party leader"
+                contentDescription = "image of the party leader",
+                contentScale = ContentScale.FillWidth,
+                modifier = Modifier.fillMaxWidth()
             )
             Text(text = "Leder: ${partyInfo.leader}")
 
