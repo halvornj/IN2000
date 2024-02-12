@@ -21,8 +21,8 @@ data class PartyInfoUiState(
 class HomeScreenViewModel(
     private val alpacaPartiesRepo: AlpacaPartiesRepository = AlpacaPartiesRepository(),
     //maybe clean these two up a bit
-    private val privatePartyInfoUiState: MutableStateFlow<PartyInfoUiState> = MutableStateFlow(PartyInfoUiState()),
-    val partyInfoUiState : StateFlow<PartyInfoUiState> = privatePartyInfoUiState.asStateFlow()
+    private val _partyInfoUiState: MutableStateFlow<PartyInfoUiState> = MutableStateFlow(PartyInfoUiState()),
+    val partyInfoUiState : StateFlow<PartyInfoUiState> = _partyInfoUiState.asStateFlow()
     ) : ViewModel() {
     init {
         loadPartyInfo()
@@ -30,7 +30,7 @@ class HomeScreenViewModel(
 
    private fun loadPartyInfo(){
         viewModelScope.launch (Dispatchers.IO) {
-            privatePartyInfoUiState.update { currentState ->
+            _partyInfoUiState.update { currentState ->
                 val parties = alpacaPartiesRepo.parties()
 
                 currentState.copy(parties = parties)

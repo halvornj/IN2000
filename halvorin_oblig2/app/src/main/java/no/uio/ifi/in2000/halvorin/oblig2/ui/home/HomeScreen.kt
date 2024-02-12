@@ -1,8 +1,10 @@
 package no.uio.ifi.in2000.halvorin.oblig2.ui.home
 
+import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,10 +12,13 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,7 +26,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -38,6 +45,7 @@ import no.uio.ifi.in2000.halvorin.oblig2.ui.home.HomeScreenViewModel
 
 @Composable
 fun HomeScreen(viewModel: HomeScreenViewModel = viewModel(), navController: NavController){
+    val TAG = "HomeScreen"
 
     val partyInfoState : PartyInfoUiState by viewModel.partyInfoUiState.collectAsState()
     Column(
@@ -46,30 +54,33 @@ fun HomeScreen(viewModel: HomeScreenViewModel = viewModel(), navController: NavC
     Text(text = "Partier", fontSize = 45.sp)
     LazyVerticalGrid(columns = GridCells.Fixed(2)) {
         items(partyInfoState.parties){partyInfo ->
-            AlpacaCard(partyInfo = partyInfo)
+            AlpacaCard(partyInfo = partyInfo, onClick = {
+                Log.d(TAG, "in onclick")
+                navController.navigate("PartyScreen/${partyInfo.id}")
+            })
         }
     }
     }
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AlpacaCard(partyInfo:PartyInfo){
+fun AlpacaCard(partyInfo:PartyInfo, onClick:()->Unit = {}){
     ElevatedCard(
+        onClick = onClick,
         modifier = Modifier
             .padding(6.dp)
             .border(
                 width = 5.dp,
                 color = Color(android.graphics.Color.parseColor(partyInfo.color)),
-                shape = ShapeDefaults.Medium
-            ),
-
+                shape = ShapeDefaults.Medium),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp
         )
     ) {
         Column(
-            modifier = Modifier.padding(6.dp),
+            modifier = Modifier.padding(10.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -79,12 +90,13 @@ fun AlpacaCard(partyInfo:PartyInfo){
                 loading = { CircularProgressIndicator()},
                 contentDescription = "image of the party leader",
                 contentScale = ContentScale.FillWidth,
-                modifier = Modifier.fillMaxWidth()
+                modifier =
+                Modifier.fillMaxWidth()
+                   .clip(RoundedCornerShape(percent = 10))
             )
             Text(text = "Leder: ${partyInfo.leader}")
 
         }
-
     }
 }
 

@@ -16,4 +16,14 @@ class AlpacaPartiesRepositoryTest{
         }
     }
 
+    //part 2
+    @Test
+    fun correct_id(){
+        runBlocking {
+            //data copied directly from endpoint
+            assert(repo.getPartyInfo(2).name=="AlpacaEast")
+            assert(repo.getPartyInfo(4).color=="#b0c0bc")
+        }
+    }
+
 }
