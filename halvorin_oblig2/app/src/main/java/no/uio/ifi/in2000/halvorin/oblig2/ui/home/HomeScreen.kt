@@ -1,6 +1,7 @@
 package no.uio.ifi.in2000.halvorin.oblig2.ui.home
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -44,7 +45,10 @@ import no.uio.ifi.in2000.halvorin.oblig2.ui.home.HomeScreenViewModel
 
 
 @Composable
-fun HomeScreen(viewModel: HomeScreenViewModel = viewModel(), navController: NavController){
+fun HomeScreen(
+    viewModel: HomeScreenViewModel = viewModel(),
+    navController: NavController
+){
     val TAG = "HomeScreen"
 
     val partyInfoState : PartyInfoUiState by viewModel.partyInfoUiState.collectAsState()
@@ -74,7 +78,8 @@ fun AlpacaCard(partyInfo:PartyInfo, onClick:()->Unit = {}){
             .border(
                 width = 5.dp,
                 color = Color(android.graphics.Color.parseColor(partyInfo.color)),
-                shape = ShapeDefaults.Medium),
+                shape = ShapeDefaults.Medium)
+            .background(color = Color(240,240,240)),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp
         )

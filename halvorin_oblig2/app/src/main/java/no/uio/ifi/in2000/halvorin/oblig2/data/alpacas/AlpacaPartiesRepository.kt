@@ -12,8 +12,8 @@ class AlpacaPartiesRepository(private val source : AlpacaPartiesDataSource= Alpa
         return parties as List<PartyInfo>
     }
 
-    suspend fun getPartyInfo(id: Int):PartyInfo{
-        return parties?.first { party -> party.id.toInt() == id }
-            ?: parties().first { party -> party.id.toInt() == id }  //assuming unique IDs, no duplicates
+    suspend fun getPartyInfo(id: String):PartyInfo{
+        return parties?.first { party -> party.id == id }
+            ?: parties().first { party -> party.id == id }  //assuming unique IDs, no duplicates
     }
 }
