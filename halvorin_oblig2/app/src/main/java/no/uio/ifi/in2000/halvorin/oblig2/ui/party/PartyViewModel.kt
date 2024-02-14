@@ -22,27 +22,26 @@ data class PartyUiState(
 )
 
 class PartyViewModel(
-    private val TAG: String = "PartyViewModel",
-
-    private val alpacaPartiesRepo: AlpacaPartiesRepository = AlpacaPartiesRepository(),
     savedStateHandle: SavedStateHandle,
+    private val alpacaPartiesRepo: AlpacaPartiesRepository = AlpacaPartiesRepository(),
 
-    //ui-states
-    private val _partyUiState: MutableStateFlow<PartyUiState> = MutableStateFlow(PartyUiState()),
-    val partyUiState:StateFlow<PartyUiState> = _partyUiState.asStateFlow()
 
     ):ViewModel(){
+    private val TAG: String = "PartyViewModel"
 
+    //ui-states
+    private val _partyUiState: MutableStateFlow<PartyUiState> = MutableStateFlow(PartyUiState())
+    val partyUiState:StateFlow<PartyUiState> = _partyUiState.asStateFlow()
     private val id: String = checkNotNull(savedStateHandle["id"])
 
-   /*
+
     init {
         //DEBUG
 
         Log.d(TAG, id)
         getInfoAboutParty(id)
     }
-*/
+
 
     private fun getInfoAboutParty(id:String){
         //DEBUG

@@ -11,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.SubcomposeAsyncImage
@@ -18,9 +19,9 @@ import coil.compose.SubcomposeAsyncImage
 
 @Composable
 fun PartyScreen(
-    viewModel: PartyViewModel= viewModel(),
     navController: NavController,
-    id:String
+    id:String,
+    viewModel: PartyViewModel= viewModel(),
 ){
     val TAG = "PartyScreen"
     val partyState:PartyUiState by viewModel.partyUiState.collectAsState()
