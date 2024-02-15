@@ -18,7 +18,7 @@ import no.uio.ifi.in2000.halvorin.oblig2.ui.home.PartyInfoUiState
 
 data class PartyUiState(
     //initialize with empty party
-    val partyInfo:PartyInfo = PartyInfo("","","","","","")
+    val partyInfo:PartyInfo = PartyInfo("","","","","#ffffff","")
 )
 
 class PartyViewModel(
