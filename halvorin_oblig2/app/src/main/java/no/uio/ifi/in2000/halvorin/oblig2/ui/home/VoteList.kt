@@ -18,9 +18,9 @@ import no.uio.ifi.in2000.halvorin.oblig2.model.alpacas.PartyInfo
 
 
 @Composable
-fun VoteList(voteCount: Map<String, Int>){
-    //voteCount is purely partyName to Count of votes
-    //counting and aggregation happens elsewhere. todo specify where
+fun VoteList(voteCount: Map<String, Pair<String, Int>>){
+    //voteCount is purely id to pair<partyName, votes>
+    //counting and aggregation happens via alpacaPartiesRepository
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier
@@ -30,12 +30,12 @@ fun VoteList(voteCount: Map<String, Int>){
             Text(text = "Parti", fontSize = 20.sp)
         }
         item{ Text(text = "Antall Stemmer", fontSize = 20.sp)}
-        voteCount.keys.forEach {key ->
+        voteCount.values.forEach {pair ->
             item{
-                Text(text = key)
+                Text(text = pair.first)
             }
             item {
-                Text(text = voteCount[key].toString())
+                Text(text = pair.second.toString())
             }
         }
     }
@@ -45,5 +45,10 @@ fun VoteList(voteCount: Map<String, Int>){
 @Preview
 @Composable
 fun VoteListPreview(){
-    VoteList(voteCount = mapOf("AlpacaNorth" to 7569, "AlpacaWest" to 7796, "AlpacaEast" to 9554, "AlpacaSouth" to 7953))
+    VoteList(voteCount = mapOf(
+        "1" to Pair("AlpacaNorth",123),
+        "2" to Pair("AlpacaEast", 456),
+        "3" to Pair("AlpacaSouth", 7890),
+        "4" to Pair("AlpacaWest", 987654)
+    ))
 }
